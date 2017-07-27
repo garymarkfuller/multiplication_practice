@@ -19,10 +19,10 @@ if(isset($post_data)) {
     // Instantiate the class passing in the post data as an argument.
     $test = new randomMultiplicationChecker($post_data);
     // Call the answerCheck method and create the variables $correct and $number_correct from what it returns.
-    list($correct, $number_correct) = $test->answerCheck();
-}
-// If $number_correct isn't set yet, assign it the value of 0.
-if(!isset($number_correct)) {
+    list($correct, $number_correct, $question_number, $level_number) = $test->answerCheck();
+} else {
+    $question_number = 1;
+    $level_number = 1;
     $number_correct = 0;
 }
 ?>
@@ -30,14 +30,17 @@ if(!isset($number_correct)) {
 <?php 
 // If this is the first time the page has been loaded or the previous answer was correct, 
 // show the form and a new question.
-if(!isset($post_data) || $correct === true): ?>    
+if(!isset($post_data) || $correct === true): ?>
+<h1>Level <?php echo $level_number; ?> : Question <?php echo $question_number; ?></h1>
 <p>Input your answer and click submit before you run out of time...</p>
 <p>What is <?php echo $first_number ?> x <?php echo $second_number ?>?</p>
-    <form id="answer" method="post" action="">
+    <form id="answer" method="post" action="<?php $_SERVER["PHP_SELF"]; ?>">
       <input type="text" name="sumAnswer">
       <input type="hidden" value="<?php echo $first_number ?>" name="firstNumber">
       <input type="hidden" value="<?php echo $second_number ?>" name="secondNumber">
-      <input type="hidden" value="<?php echo $number_correct ?>" name="numberCorrect">       
+      <input type="hidden" value="<?php echo $number_correct ?>" name="numberCorrect">
+      <input type="hidden" value="<?php echo $question_number ?>" name="questionNumber">
+      <input type="hidden" value="<?php echo $level_number ?>" name="levelNumber">
       <input type="submit">
     </form>
 <?php else: ?>
